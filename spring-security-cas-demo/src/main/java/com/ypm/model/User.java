@@ -1,23 +1,24 @@
 package com.ypm.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-
-@Entity
 public class User {
-	public enum ROLE {
-		admin, user;
-	}
 
-	@Enumerated(EnumType.STRING)
-	private ROLE role;
+	private long id;
 
-	@Id
 	private String username;
 
 	private String password;
+
+	private boolean isEnabled = true;
+	
+	private String authorities;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getUsername() {
 		return username;
@@ -35,11 +36,23 @@ public class User {
 		this.password = password;
 	}
 
-	public ROLE getRole() {
-		return role;
+	public boolean isEnabled() {
+		return isEnabled;
 	}
 
-	public void setRole(ROLE role) {
-		this.role = role;
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
+
+	public String getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(String authorities) {
+		this.authorities = authorities;
+	}
+
+	
+
+	
 }

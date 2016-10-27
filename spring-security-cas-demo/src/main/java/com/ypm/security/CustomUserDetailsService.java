@@ -9,25 +9,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.ypm.interfaces.IUserService;
 import com.ypm.model.User;
-import com.ypm.repository.UserRespository;
+import com.ypm.util.StringUtil;
 
 
 public class CustomUserDetailsService  implements UserDetailsService{
 
 	 @Autowired 
-	 UserRespository userRepository;
+	 IUserService userService;
 	 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		User user = userRepository.findByUsername(username);
+		User user = userService.getUserInfoByUserName(username);
 		 if(user == null){
 	            throw new UsernameNotFoundException("not found");
 	        }
+		 List<String> authoryList = StringUtil.getSeparatorList(user.getAuthorities(), null);
 	        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-	        authorities.add(new SimpleGrantedAuthority(user.getRole().name()));
-	        System.err.println("username is " + username + ", " + user.getRole().name());
+	        for(String auth:authoryList){
+	        	 authorities.add(new SimpleGrantedAuthority(auth));
+	        }
+	        System.err.println("username is " + username + ", auth is " + user.getAuthorities());
 	        return new org.springframework.security.core.userdetails.User(user.getUsername(),
 	                user.getPassword(), authorities);
 		
